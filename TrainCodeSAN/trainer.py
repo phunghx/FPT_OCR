@@ -84,7 +84,7 @@ class Trainer():
         with torch.no_grad():
             for idx_scale, scale in enumerate(self.scale):
                 eval_acc = 0
-                self.loader_test.dataset.set_scale(idx_scale)
+                #self.loader_test.dataset.set_scale(idx_scale)
                 tqdm_test = tqdm(self.loader_test, ncols=80)
                 for idx_img, (lr, hr, filename, _) in enumerate(tqdm_test):
                     filename = filename[0]

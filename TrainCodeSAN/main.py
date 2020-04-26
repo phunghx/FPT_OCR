@@ -34,7 +34,7 @@ whole_datasets = {set_name:
 dataloaders = {set_name: DataLoader(whole_datasets[set_name], 
                                     batch_size=batch_size,
                                     shuffle=set_name=='train', 
-                                    num_workers=64) # num_work can be set to batch_size
+                                    num_workers=8) # num_work can be set to batch_size
                for set_name in ['train', 'val']}
 
 if checkpoint.ok:

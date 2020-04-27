@@ -5,6 +5,7 @@ import torch.nn as nn
 import torch.nn.functional as F
 from torch.utils.data import DataLoader
 from .dataset import Dataset
+from .dataset_ori import DatasetOri
 from .models import EdgeModel, SRModel
 from .metrics import PSNR, EdgeAccuracy
 from .utils import Progbar, create_dir, stitch_images, imsave
@@ -29,7 +30,7 @@ class EdgeMatch():
         self.psnr = PSNR(255.0).to(config.DEVICE)
         self.edgeacc = EdgeAccuracy(config.EDGE_THRESHOLD).to(config.DEVICE)
 
-        self.test_dataset = Dataset('test', sigma=config.SIGMA, scale=1, hr_size=0, augment=False)
+        self.test_dataset = DatasetOri(config.TEST_FLIST_LR, config.TEST_FLIST_LR, sigma=config.SIGMA, scale=1, hr_size=0, augment=False)
         self.train_dataset = Dataset('train', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=True)
         self.val_dataset = Dataset('val', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=False)
         self.sample_iterator = self.val_dataset.create_iterator(config.SAMPLE_SIZE)

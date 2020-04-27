@@ -1,5 +1,5 @@
 MODE: 1             # 1: train, 2: test, 3: eval
-MODEL: 1            # 1: edge model, 2: SR model, 3: joint SR model with edge enhancer
+MODEL: 3            # 1: edge model, 2: SR model, 3: joint SR model with edge enhancer
 SCALE: 4            # scale factor (2, 4, 8)
 SEED: 10            # random seed
 GPU: [0]            # list of gpu ids

@@ -25,21 +25,17 @@ whole_datasets = {set_name:
                                      transform=None, 
                                      sigmaMin=sigmaMin, sigmaMax=sigmaMax,
                                    downsampleFactor=4.0,lowerpath='LR')
-                  for set_name in ['train', 'val']}
+                  for set_name in ['train', 'val','test']}
 
 class Dataset(torch.utils.data.Dataset):
     def __init__(self, dataset_type, sigma, scale, hr_size, augment=True):
         super().__init__()
         self.augment = augment
         self.dataset_type = dataset_type
-        if self.dataset_type == 'train':
-            self.lr_data = whole_datasets['train'].samplePathLR
-            self.hr_data = whole_datasets['train'].samplePathHD
-            self.hr_path = whole_datasets['train'].nameHD
-        else: 
-            self.lr_data = whole_datasets['val'].samplePathLR
-            self.hr_data = whole_datasets['val'].samplePathHD
-            self.hr_path = whole_datasets['train'].nameHD
+        
+        self.lr_data = whole_datasets[self.dataset_type].samplePathLR
+        self.hr_data = whole_datasets[self.dataset_type].samplePathHD
+        self.hr_path = whole_datasets[self.dataset_type].nameHD
         
 
         self.hr_size = hr_size

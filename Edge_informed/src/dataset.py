@@ -4,12 +4,13 @@ import scipy
 import torch
 import random
 import numpy as np
-import torchvision.transforms.functional as F
+import torchvision.transforms.functional as Ff
 from torch.utils.data import DataLoader
 from PIL import Image
 from scipy.misc import imread
 from skimage.feature import canny
 from skimage.color import rgb2gray, gray2rgb
+from src.datasetICDAR2015 import *
 path_to_root = '/root/FPT_OCR/data/'
 
 
@@ -21,7 +22,7 @@ batch_size=16
 whole_datasets = {set_name: 
                   DatasetICDAR2015(root_dir=path_to_root,
                                      size=cropSize, set_name=set_name, 
-                                     transform=transform4Image, 
+                                     transform=None, 
                                      sigmaMin=sigmaMin, sigmaMax=sigmaMax,
                                    downsampleFactor=4.0,lowerpath='LR')
                   for set_name in ['train', 'val']}
@@ -32,12 +33,12 @@ class Dataset(torch.utils.data.Dataset):
         self.augment = augment
         self.dataset_type = dataset_type
         if self.dataset_type == 'train':
-            self.lr_data = whole_datasets['train'].samplePathHD
-            self.hr_data = whole_datasets['train'].samplePathLR
+            self.lr_data = whole_datasets['train'].samplePathLR
+            self.hr_data = whole_datasets['train'].samplePathHD
             self.hr_path = whole_datasets['train'].nameHD
-        else 
-            self.lr_data = whole_datasets['val'].samplePathHD
-            self.hr_data = whole_datasets['val'].samplePathLR
+        else: 
+            self.lr_data = whole_datasets['val'].samplePathLR
+            self.hr_data = whole_datasets['val'].samplePathHD
             self.hr_path = whole_datasets['train'].nameHD
         
 
@@ -105,7 +106,7 @@ class Dataset(torch.utils.data.Dataset):
 
     def to_tensor(self, img):
         img = Image.fromarray(img)
-        img_t = F.to_tensor(img).float()
+        img_t = Ff.to_tensor(img).float()
         return img_t
 
     def resize(self, img, height, width):

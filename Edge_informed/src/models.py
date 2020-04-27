@@ -107,6 +107,7 @@ class EdgeModel(BaseModel):
 
         # discriminator loss
         dis_input_real = torch.cat((hr_images, hr_edges), dim=1)
+        #import pdb;pdb.set_trace()
         dis_input_fake = torch.cat((hr_images, outputs.detach()), dim=1)
         dis_real, dis_real_feat = self.discriminator(dis_input_real)        # in: (rgb(3) + edge(1))
         dis_fake, dis_fake_feat = self.discriminator(dis_input_fake)        # in: (rgb(3) + edge(1))
@@ -174,9 +175,10 @@ class SRModel(BaseModel):
 
         kernel = np.zeros((self.config.SCALE, self.config.SCALE))
         kernel[0, 0] = 1
-        kernel_weight = torch.tensor(np.tile(kernel, (3, 1, 1, 1))).float()     # (out_channels, in_channels/groups, height, width)
+        kernel_weight = torch.tensor(np.tile(kernel, (3, 1, 1, 1))).float().to(config.DEVICE)     # (out_channels, in_channels/groups, height, width)
 
-        self.add_module('scale_kernel', kernel_weight)
+        #self.add_module('scale_kernel', kernel_weight)
+        self.scale_kernel = torch.tensor(np.tile(kernel, (3, 1, 1, 1))).float().to(config.DEVICE)
 
         self.add_module('generator', generator)
         self.add_module('discriminator', discriminator)
@@ -259,7 +261,9 @@ class SRModel(BaseModel):
         return outputs, gen_loss, dis_loss, logs
 
     def forward(self, lr_images, hr_edges):
-        hr_images = F.conv_transpose2d(lr_images, self.scale_kernel, padding=0, stride=2, groups=3)
+        #import pdb;pdb.set_trace()
+        #hr_images = F.conv_transpose2d(lr_images, self.scale_kernel, padding=0, stride=2, groups=3)
+        hr_images = F.conv_transpose2d(lr_images, self.scale_kernel, padding=0, stride=self.config.SCALE, groups=3)
         inputs = torch.cat((hr_images, hr_edges), dim=1)
         outputs = self.generator(inputs)
         return outputs

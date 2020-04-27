@@ -25,13 +25,13 @@ class EdgeMatch():
         self.model_name = model_name
         self.edge_model = EdgeModel(config).to(config.DEVICE)
         self.sr_model = SRModel(config).to(config.DEVICE)
-
+        #import pdb;pdb.set_trace()
         self.psnr = PSNR(255.0).to(config.DEVICE)
         self.edgeacc = EdgeAccuracy(config.EDGE_THRESHOLD).to(config.DEVICE)
 
-        self.test_dataset = Dataset(config.TEST_FLIST_LR, config.TEST_FLIST_LR, sigma=config.SIGMA, scale=1, hr_size=0, augment=False)
-        self.train_dataset = Dataset(config.TRAIN_FLIST_LR, config.TRAIN_FLIST_HR, sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=True)
-        self.val_dataset = Dataset(config.VAL_FLIST_LR, config.VAL_FLIST_HR, sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=False)
+        self.test_dataset = Dataset('test', sigma=config.SIGMA, scale=1, hr_size=0, augment=False)
+        self.train_dataset = Dataset('train', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=True)
+        self.val_dataset = Dataset('val', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=False)
         self.sample_iterator = self.val_dataset.create_iterator(config.SAMPLE_SIZE)
 
         self.samples_path = os.path.join(config.PATH, 'samples')

@@ -110,7 +110,7 @@ class DatasetICDAR2015(Dataset):
         
     def reagImage(self,imgName,scale=False):
         img = misc.imread(imgName)
-        img = img.astype(np.float32) # NOT float!!!
+        #img = img.astype(np.float32) # NOT float!!!
         if len(img.shape)<3:
             img = np.expand_dims(img,2)
             img = np.concatenate((img,img,img),2)
@@ -118,7 +118,7 @@ class DatasetICDAR2015(Dataset):
         if(scale):
             img = misc.imresize(img, self.downsampleFactor, 'bicubic')
             img = np.clip(img, 0, 255) 
-            img = img.astype(np.float32) 
+            #img = img.astype(np.float32) 
         #img = self.modcrop(img, scale=self.downsampleFactor)
         return img
          

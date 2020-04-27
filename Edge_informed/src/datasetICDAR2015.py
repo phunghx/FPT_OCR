@@ -37,6 +37,7 @@ class DatasetICDAR2015(Dataset):
         self.current_set_dir = path.join(self.root_dir, self.set_name)             
         self.samplePathHD = []
         self.samplePathLR = []
+        self.nameHD = []
         self.sigmaMin, self.sigmaMax = sigmaMin, sigmaMax
         self.size = size        
         self.kernelSIZE = 3
@@ -62,7 +63,6 @@ class DatasetICDAR2015(Dataset):
                             xscale = int(x/self.downsampleFactor)
                             yscale = int(y/self.downsampleFactor)
                             
-<<<<<<< HEAD
                             im1 = hdimage[x:x+self.size_true[0],y:y+self.size_true[1],:]
                             im2 = lrimage[xscale:xscale+int(self.size_true[0]/self.downsampleFactor),
                                                              yscale:yscale+int(self.size_true[1]/self.downsampleFactor),:]
@@ -70,12 +70,7 @@ class DatasetICDAR2015(Dataset):
                                #print(im2.shape,im1.shape)
                                self.samplePathHD.append(im1)
                                self.samplePathLR.append(im2)
-=======
-                            self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1],:])
-                            self.samplePathLR.append(lrimage[xscale:xscale+int(self.size_true[0]/self.downsampleFactor),
-                                                             yscale:yscale+int(self.size_true[1]/self.downsampleFactor),:])
-                            
->>>>>>> 427041c2c65287bf3df572064a9f274681da5f0a
+                               self.nameHD.append(pathhd)
             
         elif set_name == 'train':            
             #groundtrue
@@ -83,9 +78,10 @@ class DatasetICDAR2015(Dataset):
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TRAIN','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
-                    lrimage = self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=True)
-                    numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 100
+                    lrimage = self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=False)
+                    numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 200
                     for i in range(numimg):
+                        self.nameHD.append(pathhd)
                         x = random.randint(0,max(hdimage.shape[0]-self.size_true[0],0))
                         y = random.randint(0,max(hdimage.shape[1]-self.size_true[1],0))
                         
@@ -101,7 +97,8 @@ class DatasetICDAR2015(Dataset):
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TEST','HD', sampleFile)
                     self.samplePathHD.append(self.reagImage(pathhd))
-                    self.samplePathLR.append(self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=True))
+                    self.samplePathLR.append(self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=False))
+                    self.nameHD.append(pathhd)
             
 
         self.current_set_len = len(self.samplePathHD)   
@@ -122,7 +119,7 @@ class DatasetICDAR2015(Dataset):
             img = misc.imresize(img, self.downsampleFactor, 'bicubic')
             img = np.clip(img, 0, 255) 
             img = img.astype(np.float32) 
-        img = self.modcrop(img, scale=self.downsampleFactor)
+        #img = self.modcrop(img, scale=self.downsampleFactor)
         return img
          
     

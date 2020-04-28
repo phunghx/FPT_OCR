@@ -137,13 +137,13 @@ class VGG19(torch.nn.Module):
         self.relu5_2 = torch.nn.Sequential()
         self.relu5_3 = torch.nn.Sequential()
         self.relu5_4 = torch.nn.Sequential()
-        conv1 = nn.Conv2d(1, 64, kernel_size=(3,3), stride=1, padding=1,bias=True)
+        #conv1 = nn.Conv2d(1, 64, kernel_size=(3,3), stride=1, padding=1,bias=True)
         
-        with torch.no_grad():
-            conv1.weight.copy_(torch.from_numpy(np.expand_dims(self.rgb2gray(features[0].weight.detach().numpy()),1)).float())
-            conv1.bias.copy_(features[0].bias)
-        self.relu1_1.add_module(str(0), conv1)
-        for x in range(1,2):
+        #with torch.no_grad():
+        #    conv1.weight.copy_(torch.from_numpy(np.expand_dims(self.rgb2gray(features[0].weight.detach().numpy()),1)).float())
+        #    conv1.bias.copy_(features[0].bias)
+        #self.relu1_1.add_module(str(0), conv1)
+        for x in range(2):
             self.relu1_1.add_module(str(x), features[x])
 
         for x in range(2, 4):

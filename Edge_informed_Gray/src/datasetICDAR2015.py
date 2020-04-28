@@ -61,17 +61,12 @@ class DatasetICDAR2015(Dataset):
                                 x = hdimage.shape[0] - self.size_true[0]
                             if (y+self.size_true[1]) > hdimage.shape[1]:
                                 y = hdimage.shape[1] - self.size_true[1] 
-                            xscale = int(x/self.downsampleFactor)
-                            yscale = int(y/self.downsampleFactor)
                             
-                            im1 = hdimage[x:x+self.size_true[0],y:y+self.size_true[1],:]
-                            im2 = lrimage[xscale:xscale+int(self.size_true[0]/self.downsampleFactor),
-                                                             yscale:yscale+int(self.size_true[1]/self.downsampleFactor),:]
-                            if im2.shape[0]*self.downsampleFactor == self.size_true[0] and im2.shape[1]*self.downsampleFactor==self.size_true[1]:
-                               #print(im2.shape,im1.shape)
-                               self.samplePathHD.append(im1)
-                               self.samplePathLR.append(im2)
-                               self.nameHD.append(pathhd)
+                            im1 = hdimage[x:x+self.size_true[0],y:y+self.size_true[1]]
+                            im2 = lrimage[x:x+self.size_true[0],y:y+self.size_true[1]]
+                            self.samplePathHD.append(im1)
+                            self.samplePathLR.append(im2)
+                            self.nameHD.append(pathhd)
             
         elif set_name == 'train':            
             #groundtrue

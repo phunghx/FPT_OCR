@@ -76,6 +76,10 @@ class Dataset(torch.utils.data.Dataset):
         hr_edge = self.load_edge(hr_img)
         lr_edge = self.load_edge(lr_img)
         x,y, size_patch = self.dataPatch[index]
+        scipy.misc.imsave('/root/FPT_update/hr_img.png',hr_img)
+        scipy.misc.imsave('/root/FPT_update/lr_img.png',lr_img)
+        scipy.misc.imsave('/root/FPT_update/hr_img_edge.png',hr_edge)
+        scipy.misc.imsave('/root/FPT_update/lr_img_edge.png',lr_edge)
         
         hr_img = hr_img[x:x+size_patch[0],y:y+size_patch[1]]
         lr_img = lr_img[x:x+size_patch[0],y:y+size_patch[1]]

@@ -45,26 +45,13 @@ class DatasetOri(torch.utils.data.Dataset):
         scale = self.scale
 
         # load hr image
-        hr_img = imread(self.hr_data[index])
+        lr_img = imread(self.lr_data[index])
+        imgh, imgw = lr_img.shape[0:2]
+        lr_img = scipy.misc.imresize(lr_img, [imgh * scale, imgw * scale])
 
 
-        # load lr image
-        if len(self.lr_data) != 0:
-            lr_img = imread(self.lr_data[index])
-        # create lr image
-        else:
-            lr_img = hr_img
-            if size == 0:
-                # resize without cropping
-                imgh, imgw = lr_img.shape[0:2]
-                lr_img = scipy.misc.imresize(lr_img, [imgh // scale, imgw // scale])
-
-
+        hr_img = lr_img.copy()
         # resize/crop if needed
-        if size != 0:
-            hr_img = self.resize(hr_img, size, size)
-            lr_img = self.resize(lr_img, size // scale, size // scale)
-
         # load edge
         hr_edge = self.load_edge(hr_img, index)
         lr_edge = self.load_edge(lr_img, index)

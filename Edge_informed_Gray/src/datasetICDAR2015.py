@@ -89,11 +89,11 @@ class DatasetICDAR2015(Dataset):
                         x = random.randint(0,max(hdimage.shape[0]-self.size_true[0],0))
                         y = random.randint(0,max(hdimage.shape[1]-self.size_true[1],0))
                             
-                        self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1]])
+                        self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
                         if random.uniform(0,1) > 0.5:
-                            self.samplePathLR.append(lrimage[x:x+self.size_true[0],y:y+self.size_true[1]])
+                            self.samplePathLR.append(lrimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
                         else:
-                            self.samplePathLR.append(hrimage[x:x+self.size_true[0],y:y+self.size_true[1]])
+                            self.samplePathLR.append(hrimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
             #error data 
             count = 0
             i = 0

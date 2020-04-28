@@ -98,6 +98,7 @@ class DatasetICDAR2015(Dataset):
         else:
             #groundtrue
             for sampleFile in os.listdir(path.join(self.root_dir, 'TEST','HD')):
+                continue
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TEST','HD', sampleFile)
                     self.samplePathHD.append(self.reagImage(pathhd))

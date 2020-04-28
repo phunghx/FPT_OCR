@@ -43,7 +43,7 @@ class Dataset(torch.utils.data.Dataset):
         self.scale = scale
 
     def __len__(self):
-        return len(self.hr_data)
+        return len(self.hr_data_path)
 
     def __getitem__(self, index):
         #try:
@@ -65,18 +65,18 @@ class Dataset(torch.utils.data.Dataset):
         scale = self.scale
         flag = True
         
-        hr_img = scipy.misc.imread(self.hr_data[index])
+        hr_img = scipy.misc.imread(self.hr_data_path[index])
         if len(hr_img.shape)>=3:
             hr_img = self.rgb2gray(hr_img)
-        lr_img = scipy.misc.imread(self.lr_data[index])
+        lr_img = scipy.misc.imread(self.lr_data_path[index])
         lr_img = scipy.misc.imresize(lr_img, [hr_img.shape[0], hr_img.shape[1]])
         if len(lr_img.shape)>=3:
             lr_img = self.rgb2gray(lr_img)
         
-        hr_edge = self.load_edge(hr_img, index)
-        lr_edge = self.load_edge(lr_img, index)
+        hr_edge = self.load_edge(hr_img)
+        lr_edge = self.load_edge(lr_img)
         x,y, size_patch = self.dataPatch[index]
-        import pdb;pdb.set_trace()
+        
         hr_img = hr_img[x:x+size_patch[0],y:y+size_patch[1]]
         lr_img = lr_img[x:x+size_patch[0],y:y+size_patch[1]]
         hr_edge = hr_edge[x:x+size_patch[0],y:y+size_patch[1]]

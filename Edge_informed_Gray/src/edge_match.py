@@ -35,7 +35,7 @@ class EdgeMatch():
              self.train_dataset = Dataset('train', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=True)
              #self.val_dataset = Dataset('val', sigma=config.SIGMA, scale=config.SCALE, hr_size=config.HR_SIZE, augment=False)
              self.sample_iterator = self.train_dataset.create_iterator(config.SAMPLE_SIZE)
-
+        #import pdb;pdb.set_trace()
         self.samples_path = os.path.join(config.PATH, 'samples')
         self.results_path = os.path.join(config.PATH, 'results')
 

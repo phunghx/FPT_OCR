@@ -38,10 +38,8 @@ class DatasetICDAR2015(Dataset):
         self.current_set_dir = path.join(self.root_dir, self.set_name)             
         self.samplePathHD = []
         self.samplePathLR = []
-        self.imageHD = []
-        self.imageHR = []
-        self.imageLR = []
-        self.nameHD = []
+        
+        self.dataPatch = []
         self.sigmaMin, self.sigmaMax = sigmaMin, sigmaMax
         self.size = size        
         self.kernelSIZE = 3
@@ -53,6 +51,7 @@ class DatasetICDAR2015(Dataset):
         if set_name=='val':
             #groundtrue
             for sampleFile in sorted(os.listdir(path.join(self.root_dir, 'VAL','HD'))):
+                continue
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'VAL','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
@@ -77,41 +76,24 @@ class DatasetICDAR2015(Dataset):
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TRAIN','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
-                    lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scaleFactor=4.0)
-                    hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scaleFactor=2.0)
+                    #lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scaleFactor=4.0)
+                    #hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scaleFactor=2.0)
                     #self.imageHD.append(hdimage)
                     #self.imageHR.append(hrimage)
                     #self.imageLR.append(lrimage)
-                    assert(hdimage.shape[0]==lrimage.shape[0] and lrimage.shape[0]==hrimage.shape[0])
-                    assert(hdimage.shape[1]==lrimage.shape[1] and lrimage.shape[1]==hrimage.shape[1])
+                    #assert(hdimage.shape[0]==lrimage.shape[0] and lrimage.shape[0]==hrimage.shape[0])
+                    #assert(hdimage.shape[1]==lrimage.shape[1] and lrimage.shape[1]==hrimage.shape[1])
                     numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 400
                     for i in range(numimg):
-                        self.nameHD.append(pathhd)
+                        self.samplePathHD.append(pathhd)
                         x = random.randint(0,max(hdimage.shape[0]-self.size_true[0],0))
                         y = random.randint(0,max(hdimage.shape[1]-self.size_true[1],0))
-                            
-                        self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
+                        self.dataPatch.append([x,y,self.size_true])
+                        #self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
                         if random.uniform(0,1) > 0.5:
-                            self.samplePathLR.append(lrimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
+                            self.samplePathLR.append(pathhd.replace('HD','LR').replace('hd','lr'))
                         else:
-                            self.samplePathLR.append(hrimage[x:x+self.size_true[0],y:y+self.size_true[1]].copy())
-            #error data 
-            count = 0
-            i = 0
-            while i < len(self.samplePathHD):
-                if len(self.samplePathHD[i]) <=0 or len(self.samplePathLR[i]) <= 0 :
-                    count += 1
-                    del  self.samplePathHD[i]
-                    del  self.samplePathLR[i]
-                    del  self.samplePathHR[i]
-                elif self.checkSize(i,self.size_true)==False:
-                    count +=1
-                    del  self.samplePathHD[i]
-                    del  self.samplePathLR[i]
-                    del  self.samplePathHR[i]
-                else:
-                    i +=1
-            print("error data: ", count)
+                            self.samplePathLR.append(pathhd.replace('HD','HR').replace('hd','hr'))
                        
         else:
             #groundtrue

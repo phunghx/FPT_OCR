@@ -33,9 +33,9 @@ class Dataset(torch.utils.data.Dataset):
         self.augment = augment
         self.dataset_type = dataset_type
         
-        self.lr_data = whole_datasets[self.dataset_type].samplePathLR
-        self.hr_data = whole_datasets[self.dataset_type].samplePathHD
-        self.hr_path = whole_datasets[self.dataset_type].nameHD
+        self.lr_data_path = whole_datasets[self.dataset_type].samplePathLR
+        self.hr_data_path = whole_datasets[self.dataset_type].samplePathHD
+        self.dataPatch = whole_datasets[self.dataset_type].dataPatch
         
 
         self.hr_size = hr_size
@@ -55,60 +55,43 @@ class Dataset(torch.utils.data.Dataset):
         return item
 
     def load_name(self, index):
-        name = self.hr_path[index]
+        name = self.lr_data_path[index]
         return os.path.basename(name)
-
+    def rgb2gray(self,rgb):
+        return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
     def load_item(self, index):
 
         size = self.hr_size
         scale = self.scale
         flag = True
-        while flag:
-            # load hr image
-            hr_img = self.hr_data[index]
-
-
-            # load lr image
-            if len(self.lr_data) != 0:
-                lr_img = self.lr_data[index]
-            # create lr image
-            else:
-                lr_img = hr_img
-                if size == 0:
-                    # resize without cropping
-                    imgh, imgw = lr_img.shape[0:2]
-                    lr_img = scipy.misc.imresize(lr_img, [imgh // scale, imgw // scale])
-
-
-            # resize/crop if needed
-            #if size != 0:
-            #    hr_img = self.resize(hr_img, size, size)
-            #    lr_img = self.resize(lr_img, size // scale, size // scale)
-
-            # load edge
-            try:
-                hr_edge = self.load_edge(hr_img, index)
-                lr_edge = self.load_edge(lr_img, index)
-                flag = False
-            except:
-                flag = True
-                print("error data: ", index,hr_img.shape,lr_img.shape)
-                
-                index = (index + 1) % len(self.hr_data)
-                
-                continue
-            flag = False
-
+        
+        hr_img = scipy.misc.imread(self.hr_data[index])
+        if len(hr_img.shape)>=3:
+            hr_img = self.rgb2gray(hr_img)
+        lr_img = scipy.misc.imread(self.lr_data[index])
+        lr_img = scipy.misc.imresize(lr_img, [hr_img.shape[0], hr_img.shape[1]])
+        if len(lr_img.shape)>=3:
+            lr_img = self.rgb2gray(lr_img)
+        
+        hr_edge = self.load_edge(hr_img, index)
+        lr_edge = self.load_edge(lr_img, index)
+        x,y, size_patch = self.dataPatch[index]
+        import pdb;pdb.set_trace()
+        hr_img = hr_img[x:x+size_patch[0],y:y+size_patch[1]]
+        lr_img = lr_img[x:x+size_patch[0],y:y+size_patch[1]]
+        hr_edge = hr_edge[x:x+size_patch[0],y:y+size_patch[1]]
+        lr_edge = lr_edge[x:x+size_patch[0],y:y+size_patch[1]]
+        
         # augment data
         if self.augment and np.random.binomial(1, 0.5) > 0:
             hr_img = hr_img[:, ::-1, ...]
             lr_img = lr_img[:, ::-1, ...]
             hr_edge = hr_edge[:, ::-1, ...]
             lr_edge = lr_edge[:, ::-1, ...]
-
+        
         return self.to_tensor(lr_img), self.to_tensor(hr_img), self.to_tensor(lr_edge), self.to_tensor(hr_edge)
 
-    def load_edge(self, img, index):
+    def load_edge(self, img):
         return canny(img, sigma=self.sigma).astype(np.float)
 
     def to_tensor(self, img):

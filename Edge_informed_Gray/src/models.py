@@ -63,7 +63,7 @@ class EdgeModel(BaseModel):
         # generator input: [rgb(3) + edge(1)]
         # discriminator input: (rgb(3) + edge(1))
         generator = EdgeGenerator(use_spectral_norm=True)
-        discriminator = Discriminator(in_channels=4, use_sigmoid=config.GAN_LOSS != 'hinge') #4-->2
+        discriminator = Discriminator(in_channels=2, use_sigmoid=config.GAN_LOSS != 'hinge') #4-->2
 
         if len(config.GPU)>1:
             generator = nn.DataParallel(generator, config.GPU)
@@ -162,7 +162,7 @@ class SRModel(BaseModel):
         # generator input: [gray(1) + edge(1)]
         # discriminator input: [gray(1)]
         generator = SRGenerator()
-        discriminator = Discriminator(in_channels=3, use_sigmoid=config.GAN_LOSS != 'hinge') # 3-->1
+        discriminator = Discriminator(in_channels=1, use_sigmoid=config.GAN_LOSS != 'hinge') # 3-->1
 
         if len(config.GPU) > 1:
             generator = nn.DataParallel(generator, config.GPU)

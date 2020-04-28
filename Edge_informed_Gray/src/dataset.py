@@ -66,16 +66,16 @@ class Dataset(torch.utils.data.Dataset):
         flag = True
         
         hr_img = scipy.misc.imread(self.hr_data_path[index])
-        if len(hr_img.shape)<3:
-            hr_img = np.expand_dims(hr_img,2)
-            hr_img = np.concatenate((hr_img,hr_img,hr_img),2)
-        #    hr_img = self.rgb2gray(hr_img)
+        if len(hr_img.shape)>=3:
+        #    hr_img = np.expand_dims(hr_img,2)
+        #    hr_img = np.concatenate((hr_img,hr_img,hr_img),2)
+            hr_img = self.rgb2gray(hr_img)
         lr_img = scipy.misc.imread(self.lr_data_path[index])
         lr_img = scipy.misc.imresize(lr_img, [hr_img.shape[0], hr_img.shape[1]])
-        if len(lr_img.shape)<3:
-            lr_img = np.expand_dims(lr_img,2)
-            lr_img = np.concatenate((lr_img,lr_img,lr_img),2)
-        
+        if len(lr_img.shape)>=3:
+            #lr_img = np.expand_dims(lr_img,2)
+            #lr_img = np.concatenate((lr_img,lr_img,lr_img),2)
+            lr_img = self.rgb2gray(lr_img)
         hr_edge = self.load_edge(hr_img)
         lr_edge = self.load_edge(lr_img)
         x,y, size_patch = self.dataPatch[index]

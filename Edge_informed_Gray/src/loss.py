@@ -1,6 +1,9 @@
 import torch
 import torch.nn as nn
 import torchvision.models as models
+import numpy as np
+
+
 
 
 class AdversarialLoss(nn.Module):
@@ -135,6 +138,7 @@ class VGG19(torch.nn.Module):
         self.relu5_3 = torch.nn.Sequential()
         self.relu5_4 = torch.nn.Sequential()
         conv1 = nn.Conv2d(1, 64, kernel_size=(3,3), stride=1, padding=1,bias=True)
+        import pdb;pdb.set_trace()
         with torch.no_grad():
             conv1.weight.copy_(features[0].weight[:,0:1,:,:])
             conv1.bias.copy_(features[0].bias)
@@ -190,7 +194,8 @@ class VGG19(torch.nn.Module):
         # don't need the gradients, just want the features
         for param in self.parameters():
             param.requires_grad = False
-
+    def rgb2gray(self,rgb):
+        return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
     def forward(self, x):
         relu1_1 = self.relu1_1(x)
         relu1_2 = self.relu1_2(relu1_1)

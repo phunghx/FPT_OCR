@@ -143,7 +143,7 @@ class EdgeModel(BaseModel):
     def forward(self, lr_images, lr_edges):
         #hr_images = F.interpolate(lr_images, scale_factor=self.config.SCALE)
         #hr_edges = F.interpolate(lr_edges, scale_factor=self.config.SCALE)
-        inputs = torch.cat((hr_images, hr_edges), dim=1)
+        inputs = torch.cat((lr_images, lr_edges), dim=1)
         outputs = self.generator(inputs)
         return outputs
 

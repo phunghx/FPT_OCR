@@ -98,7 +98,7 @@ class Dataset(torch.utils.data.Dataset):
         return self.to_tensor(lr_img), self.to_tensor(hr_img), self.to_tensor(lr_edge), self.to_tensor(hr_edge)
 
     def load_edge(self, img, index):
-        return canny(rgb2gray(img), sigma=self.sigma).astype(np.float)
+        return canny(img, sigma=self.sigma).astype(np.float)
 
     def to_tensor(self, img):
         img = Image.fromarray(img)

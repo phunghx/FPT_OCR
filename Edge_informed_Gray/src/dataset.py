@@ -62,31 +62,38 @@ class Dataset(torch.utils.data.Dataset):
 
         size = self.hr_size
         scale = self.scale
-
-        # load hr image
-        hr_img = self.hr_data[index]
-
-
-        # load lr image
-        if len(self.lr_data) != 0:
-            lr_img = self.lr_data[index]
-        # create lr image
-        else:
-            lr_img = hr_img
-            if size == 0:
-                # resize without cropping
-                imgh, imgw = lr_img.shape[0:2]
-                lr_img = scipy.misc.imresize(lr_img, [imgh // scale, imgw // scale])
+        flag = True
+        while flag:
+            # load hr image
+            hr_img = self.hr_data[index]
 
 
-        # resize/crop if needed
-        #if size != 0:
-        #    hr_img = self.resize(hr_img, size, size)
-        #    lr_img = self.resize(lr_img, size // scale, size // scale)
+            # load lr image
+            if len(self.lr_data) != 0:
+                lr_img = self.lr_data[index]
+            # create lr image
+            else:
+                lr_img = hr_img
+                if size == 0:
+                    # resize without cropping
+                    imgh, imgw = lr_img.shape[0:2]
+                    lr_img = scipy.misc.imresize(lr_img, [imgh // scale, imgw // scale])
 
-        # load edge
-        hr_edge = self.load_edge(hr_img, index)
-        lr_edge = self.load_edge(lr_img, index)
+
+            # resize/crop if needed
+            #if size != 0:
+            #    hr_img = self.resize(hr_img, size, size)
+            #    lr_img = self.resize(lr_img, size // scale, size // scale)
+
+            # load edge
+            try:
+                hr_edge = self.load_edge(hr_img, index)
+                lr_edge = self.load_edge(lr_img, index)
+                flag = False
+            except:
+                flag = True
+                continue
+            flag = False
 
         # augment data
         if self.augment and np.random.binomial(1, 0.5) > 0:

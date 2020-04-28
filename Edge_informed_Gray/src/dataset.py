@@ -80,9 +80,9 @@ class Dataset(torch.utils.data.Dataset):
 
 
         # resize/crop if needed
-        if size != 0:
-            hr_img = self.resize(hr_img, size, size)
-            lr_img = self.resize(lr_img, size // scale, size // scale)
+        #if size != 0:
+        #    hr_img = self.resize(hr_img, size, size)
+        #    lr_img = self.resize(lr_img, size // scale, size // scale)
 
         # load edge
         hr_edge = self.load_edge(hr_img, index)

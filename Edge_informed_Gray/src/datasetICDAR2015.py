@@ -88,13 +88,27 @@ class DatasetICDAR2015(Dataset):
                         self.nameHD.append(pathhd)
                         x = random.randint(0,max(hdimage.shape[0]-self.size_true[0],0))
                         y = random.randint(0,max(hdimage.shape[1]-self.size_true[1],0))
+                            
                         self.samplePathHD.append(hdimage[x:x+self.size_true[0],y:y+self.size_true[1]])
                         if random.uniform(0,1) > 0.5:
                             self.samplePathLR.append(lrimage[x:x+self.size_true[0],y:y+self.size_true[1]])
                         else:
                             self.samplePathLR.append(hrimage[x:x+self.size_true[0],y:y+self.size_true[1]])
-                        
-                        
+            #error data 
+            count = 0
+            for i in range(len(self.samplePathHD)):
+                if len(self.samplePathHD[i]<=0) or len(self.samplePathLR[i]<=0) or len(self.samplePathHR[i]<=0):
+                    count += 1
+                    del  self.samplePathHD[i]
+                    del  self.samplePathLR[i]
+                    del  self.samplePathHR[i]
+                elif self.checkSize(i,self.size_true)==False:
+                    count +=1
+                    del  self.samplePathHD[i]
+                    del  self.samplePathLR[i]
+                    del  self.samplePathHR[i]
+            print("error data: ", count)
+                       
         else:
             #groundtrue
             for sampleFile in os.listdir(path.join(self.root_dir, 'TEST','HD')):
@@ -107,7 +121,10 @@ class DatasetICDAR2015(Dataset):
 
         self.current_set_len = len(self.samplePathHD)   
         
-            
+    def checkSize(self,index,size):
+        return self.samplePathHD[index].shape[0]== size[0] and self.samplePathHD[index].shape[1]== size[1] and
+               self.samplePathLR[index].shape[0]== size[0] and self.samplePathLR[index].shape[1]== size[1] and
+               self.samplePathHR[index].shape[0]== size[0] and self.samplePathHR[index].shape[1]== size[1]             
     def __len__(self):        
         
         return self.current_set_len

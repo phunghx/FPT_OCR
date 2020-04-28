@@ -92,7 +92,8 @@ class Dataset(torch.utils.data.Dataset):
                 flag = False
             except:
                 flag = True
-                print("error data: ", index)
+                print("error data: ", index,hr_img.shape,lr_img.shape)
+                
                 index = (index + 1) % len(self.hr_data)
                 
                 continue

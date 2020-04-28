@@ -96,7 +96,8 @@ class DatasetICDAR2015(Dataset):
                             self.samplePathLR.append(hrimage[x:x+self.size_true[0],y:y+self.size_true[1]])
             #error data 
             count = 0
-            for i in range(len(self.samplePathHD)):
+            i = 0
+            while i < len(self.samplePathHD):
                 if len(self.samplePathHD[i]) <=0 or len(self.samplePathLR[i]) <= 0 :
                     count += 1
                     del  self.samplePathHD[i]
@@ -107,6 +108,8 @@ class DatasetICDAR2015(Dataset):
                     del  self.samplePathHD[i]
                     del  self.samplePathLR[i]
                     del  self.samplePathHR[i]
+                else:
+                    i +=1
             print("error data: ", count)
                        
         else:

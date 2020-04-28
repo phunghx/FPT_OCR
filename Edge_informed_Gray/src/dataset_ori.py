@@ -22,7 +22,8 @@ class DatasetOri(torch.utils.data.Dataset):
         self.hr_size = hr_size
         self.sigma = sigma
         self.scale = scale
-
+    def rgb2gray(self,rgb):
+        return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
     def __len__(self):
         return len(self.hr_data)
 
@@ -46,6 +47,8 @@ class DatasetOri(torch.utils.data.Dataset):
 
         # load hr image
         lr_img = imread(self.lr_data[index])
+        if len(lr_img.shape)>=3:
+            lr_img = self.rgb2gray(lr_img)
         imgh, imgw = lr_img.shape[0:2]
         lr_img = scipy.misc.imresize(lr_img, [imgh * scale, imgw * scale])
 

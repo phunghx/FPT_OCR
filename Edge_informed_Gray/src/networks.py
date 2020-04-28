@@ -95,7 +95,7 @@ class EdgeGenerator(BaseNetwork):
         
         self.encoder = nn.Sequential(
             nn.ReflectionPad2d(3),
-            spectral_norm(nn.Conv2d(in_channels=4, out_channels=64, kernel_size=7, padding=0), use_spectral_norm), #4-->2
+            spectral_norm(nn.Conv2d(in_channels=2, out_channels=64, kernel_size=7, padding=0), use_spectral_norm), #4-->2
             nn.InstanceNorm2d(64, track_running_stats=False),
             nn.ReLU(True),
 

@@ -79,8 +79,8 @@ class DatasetICDAR2015(Dataset):
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TRAIN','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
-                    lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scaleFactor=4)
-                    hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scaleFactor=2)
+                    lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scaleFactor=4.0)
+                    hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scaleFactor=2.0)
                     numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 400
                     for i in range(numimg):
                         self.nameHD.append(pathhd)

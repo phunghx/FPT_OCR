@@ -51,11 +51,11 @@ class DatasetICDAR2015(Dataset):
         if set_name=='val':
             #groundtrue
             for sampleFile in sorted(os.listdir(path.join(self.root_dir, 'VAL','HD'))):
-                continue
+                
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'VAL','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
-                    lrimage = self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=True)
+                    #lrimage = self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=True)
                     
                     for x in range(0,hdimage.shape[0],self.size_true[0]):
                         for y in range(0,hdimage.shape[1],self.size_true[1]):
@@ -63,12 +63,12 @@ class DatasetICDAR2015(Dataset):
                                 x = hdimage.shape[0] - self.size_true[0]
                             if (y+self.size_true[1]) > hdimage.shape[1]:
                                 y = hdimage.shape[1] - self.size_true[1] 
+                            self.samplePathHD.append(pathhd)
+                            self.samplePathLR.append(pathhd.replace('HD','LR').replace('hd','lr'))
+                            self.samplePathHD.append(pathhd)
+                            self.samplePathLR.append(pathhd.replace('HD','HR').replace('hd','hr'))
+                            self.dataPatch.append([x,y,self.size_true])
                             
-                            im1 = hdimage[x:x+self.size_true[0],y:y+self.size_true[1]]
-                            im2 = lrimage[x:x+self.size_true[0],y:y+self.size_true[1]]
-                            self.samplePathHD.append(im1)
-                            self.samplePathLR.append(im2)
-                            self.nameHD.append(pathhd)
             
         elif set_name == 'train':            
             #groundtrue

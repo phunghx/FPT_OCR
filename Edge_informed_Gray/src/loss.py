@@ -53,6 +53,7 @@ class StyleLoss(nn.Module):
 
     def __init__(self):
         super().__init__()
+        
         self.add_module('vgg', VGG19())
         self.criterion = torch.nn.L1Loss()
 
@@ -112,6 +113,7 @@ class VGG19(torch.nn.Module):
     def __init__(self):
         super().__init__()
         features = models.vgg19(pretrained=True).features
+        
         self.relu1_1 = torch.nn.Sequential()
         self.relu1_2 = torch.nn.Sequential()
 
@@ -132,8 +134,12 @@ class VGG19(torch.nn.Module):
         self.relu5_2 = torch.nn.Sequential()
         self.relu5_3 = torch.nn.Sequential()
         self.relu5_4 = torch.nn.Sequential()
-
-        for x in range(2):
+        conv1 = nn.Conv2d(1, 64, kernel_size=(3,3), stride=1, padding=1,bias=True)
+        with torch.no_grad():
+            conv1.weight.copy_(features[0].weight[:,0,:,:])
+            conv1.bias(features[0].bias)
+        self.relu1_1.add_module(str(0), conv1)
+        for x in range(1,2):
             self.relu1_1.add_module(str(x), features[x])
 
         for x in range(2, 4):

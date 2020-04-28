@@ -92,6 +92,7 @@ class Dataset(torch.utils.data.Dataset):
                 flag = False
             except:
                 flag = True
+                index = (index + 1) % len(self.hr_data)
                 continue
             flag = False
 

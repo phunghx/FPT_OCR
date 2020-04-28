@@ -97,7 +97,7 @@ class DatasetICDAR2015(Dataset):
             #error data 
             count = 0
             for i in range(len(self.samplePathHD)):
-                if len(self.samplePathHD[i]<=0) or len(self.samplePathLR[i]<=0) or len(self.samplePathHR[i]<=0):
+                if len(self.samplePathHD[i]) <=0 or len(self.samplePathLR[i]) <= 0 :
                     count += 1
                     del  self.samplePathHD[i]
                     del  self.samplePathLR[i]

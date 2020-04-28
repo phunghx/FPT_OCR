@@ -122,9 +122,9 @@ class DatasetICDAR2015(Dataset):
         self.current_set_len = len(self.samplePathHD)   
         
     def checkSize(self,index,size):
-        return self.samplePathHD[index].shape[0]== size[0] and self.samplePathHD[index].shape[1]== size[1] and
-               self.samplePathLR[index].shape[0]== size[0] and self.samplePathLR[index].shape[1]== size[1] and
-               self.samplePathHR[index].shape[0]== size[0] and self.samplePathHR[index].shape[1]== size[1]             
+        return self.samplePathHD[index].shape[0]== size[0] and self.samplePathHD[index].shape[1]== size[1] 
+               and self.samplePathLR[index].shape[0]== size[0] and self.samplePathLR[index].shape[1]== size[1] 
+                and self.samplePathHR[index].shape[0]== size[0] and self.samplePathHR[index].shape[1]== size[1]             
     def __len__(self):        
         
         return self.current_set_len

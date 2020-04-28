@@ -82,7 +82,8 @@ class DatasetICDAR2015(Dataset):
                     #self.imageHD.append(hdimage)
                     #self.imageHR.append(hrimage)
                     #self.imageLR.append(lrimage)
-                    
+                    assert(hdimage.shape[0]==lrimage.shape[0] and lrimage.shape[0]==hrimage.shape[0])
+                    assert(hdimage.shape[1]==lrimage.shape[1] and lrimage.shape[1]==hrimage.shape[1])
                     numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 400
                     for i in range(numimg):
                         self.nameHD.append(pathhd)

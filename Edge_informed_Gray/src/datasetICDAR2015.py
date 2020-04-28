@@ -79,8 +79,8 @@ class DatasetICDAR2015(Dataset):
                 if sampleFile.endswith('.pgm'):
                     pathhd = path.join(self.root_dir, 'TRAIN','HD', sampleFile)
                     hdimage = self.reagImage(pathhd)
-                    lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scale=4)
-                    hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scale=2)
+                    lrimage = self.reagImage(pathhd.replace('HD','LR').replace('hd','lr'),scale=True,scaleFactor=4)
+                    hrimage = self.reagImage(pathhd.replace('HD','HR').replace('hd','hr'),scale=True,scaleFactor=2)
                     numimg = int(hdimage.shape[0]/self.size[0])*10 + int(hdimage.shape[1]/self.size[1]) * 400
                     for i in range(numimg):
                         self.nameHD.append(pathhd)
@@ -113,14 +113,14 @@ class DatasetICDAR2015(Dataset):
         
     def rgb2gray(self,rgb):
         return np.dot(rgb[...,:3], [0.2989, 0.5870, 0.1140])
-    def reagImage(self,imgName,scale=False, scale=2.0):
+    def reagImage(self,imgName,scale=False, scaleFactor=2.0):
         img = misc.imread(imgName)
         #img = img.astype(np.float32) # NOT float!!!
         if len(img.shape)>=3:
             img = self.rgb2gray(img)
          
         if(scale):
-            img = misc.imresize(img, scale, 'bicubic')
+            img = misc.imresize(img, scaleFactor, 'bicubic')
             img = np.clip(img, 0, 255) 
             #img = img.astype(np.float32) 
         #img = self.modcrop(img, scale=self.downsampleFactor)

@@ -87,13 +87,13 @@ class EdgeMatch():
         if total == 0:
             print('No training data was provided! Check \'TRAIN_FLIST\' value in the configuration file.')
             return
-
+        iteration=0
         while(keep_training):
             epoch += 1
             print('\n\nTraining epoch: %d' % epoch)
 
             progbar = Progbar(total, width=20, stateful_metrics=['epoch', 'iter'])
-
+            
             for items in train_loader:
                 self.edge_model.train()
                 self.sr_model.train()

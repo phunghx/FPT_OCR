@@ -118,7 +118,15 @@ class EdgeMatch():
                 # sr model / joint model
                 else:
                     # train
-                    hr_edges_pred = self.scale(lr_edges) if model == 2 else self.edge_model(lr_images, lr_edges).detach()
+                    # hr_edges_pred = self.scale(lr_edges) if model == 2 else self.edge_model(lr_images, lr_edges).detach()
+                    
+                    hr_edges_pred, gen_loss_edge, dis_loss_edge, logs_edge = self.edge_model.process(lr_images, hr_images, lr_edges, hr_edges)
+
+                    # metrics
+                    precision, recall = self.edgeacc(hr_edges, hr_edges_pred)
+                    logs_edge.append(('precision', precision.item()))
+                    logs_edge.append(('recall', recall.item()))
+                    
                     hr_images_pred, gen_loss, dis_loss, logs = self.sr_model.process(lr_images, hr_images, lr_edges, hr_edges_pred)
 
                     # metrics
@@ -129,6 +137,9 @@ class EdgeMatch():
 
                     # backward
                     self.sr_model.backward(gen_loss, dis_loss)
+                    
+                    self.edge_model.backward(gen_loss_edge, dis_loss_edge)
+                    
                     iteration = self.sr_model.iteration
 
                 if iteration > max_iteration:
@@ -139,7 +150,7 @@ class EdgeMatch():
                 logs = [
                     ("epoch", epoch),
                     ("iter", iteration),
-                ] + logs
+                ] + logs + logs_edge
 
                 progbar.add(len(hr_images), values=logs if self.config.VERBOSE else [x for x in logs if not x[0].startswith('l_')])
 

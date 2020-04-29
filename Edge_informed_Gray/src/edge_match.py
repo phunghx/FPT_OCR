@@ -265,7 +265,7 @@ class EdgeMatch():
         self.edge_model.eval()
         self.sr_model.eval()
 
-        model = self.config.MODEL
+        model = 2
         items = next(self.sample_iterator)
         lr_images, hr_images, lr_edges, hr_edges = self.cuda(*items)
 

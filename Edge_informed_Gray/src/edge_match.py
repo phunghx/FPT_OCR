@@ -126,7 +126,8 @@ class EdgeMatch():
                     precision, recall = self.edgeacc(hr_edges, hr_edges_pred)
                     logs_edge.append(('precision', precision.item()))
                     logs_edge.append(('recall', recall.item()))
-                    self.edge_model.backward(gen_loss_edge, dis_loss_edge)
+                    
+                    #self.edge_model.backward(gen_loss_edge, dis_loss_edge)
                     
                     
                     hr_images_pred, gen_loss, dis_loss, logs = self.sr_model.process(lr_images, hr_images, lr_edges, hr_edges_pred)

@@ -270,7 +270,7 @@ class EdgeMatch():
         lr_images, hr_images, lr_edges, hr_edges = self.cuda(*items)
 
         # edge model
-        if model == 1:
+        if model == 2:
             iteration = self.edge_model.iteration
             outputs = self.edge_model(lr_images, lr_edges)
 

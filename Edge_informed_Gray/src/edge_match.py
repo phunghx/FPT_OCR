@@ -270,15 +270,15 @@ class EdgeMatch():
         lr_images, hr_images, lr_edges, hr_edges = self.cuda(*items)
 
         # edge model
-        if model == 2:
-            iteration = self.edge_model.iteration
-            outputs = self.edge_model(lr_images, lr_edges)
+        #if model == 2:
+        #    iteration = self.edge_model.iteration
+        #    outputs = self.edge_model(lr_images, lr_edges)
 
         # sr model / joint model
-        else:
-            iteration = self.sr_model.iteration
-            hr_edges = self.scale(lr_edges) if model == 2 else self.edge_model(lr_images, lr_edges).detach()
-            outputs = self.sr_model(lr_images, hr_edges)
+        
+        iteration = self.sr_model.iteration
+        hr_edges = self.scale(lr_edges) if model == 2 else self.edge_model(lr_images, lr_edges).detach()
+        outputs = self.sr_model(lr_images, hr_edges)
 
         image_per_row = 2
         if self.config.SAMPLE_SIZE <= 6:

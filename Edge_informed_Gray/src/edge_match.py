@@ -277,7 +277,7 @@ class EdgeMatch():
         # sr model / joint model
         
         iteration = self.sr_model.iteration
-        hr_edges = self.scale(lr_edges) if model == 2 else self.edge_model(lr_images, lr_edges).detach()
+        hr_edges = self.edge_model(lr_images, lr_edges).detach()
         outputs = self.sr_model(lr_images, hr_edges)
 
         image_per_row = 2

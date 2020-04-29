@@ -137,7 +137,7 @@ class EdgeMatch():
                     mae = (torch.sum(torch.abs(hr_images - hr_images_pred)) / torch.sum(hr_images)).float()
                     logs.append(('psnr', psnr.item()))
                     logs.append(('mae', mae.item()))
-
+                    logs = logs + logs_edge
                     # backward
                     self.sr_model.backward(gen_loss, dis_loss)
                     
@@ -153,7 +153,7 @@ class EdgeMatch():
                 logs = [
                     ("epoch", epoch),
                     ("iter", iteration),
-                ] + logs + logs_edge
+                ] + logs 
 
                 progbar.add(len(hr_images), values=logs if self.config.VERBOSE else [x for x in logs if not x[0].startswith('l_')])
 

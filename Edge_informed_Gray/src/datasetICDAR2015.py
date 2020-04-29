@@ -57,8 +57,8 @@ class DatasetICDAR2015(Dataset):
                     hdimage = self.reagImage(pathhd)
                     #lrimage = self.reagImage(pathhd.replace('HD',lowerpath).replace('hd',lowerpath.lower()),scale=True)
                     
-                    for x in range(0,hdimage.shape[0],self.size_true[0]):
-                        for y in range(0,hdimage.shape[1],self.size_true[1]):
+                    for x in range(0,hdimage.shape[0]-self.size_true[0],self.size_true[0]):
+                        for y in range(0,hdimage.shape[1]-self.size_true[1],self.size_true[1]):
                             if (x+self.size_true[0]) > hdimage.shape[0]:
                                 x = hdimage.shape[0] - self.size_true[0]
                             if (y+self.size_true[1]) > hdimage.shape[1]:

@@ -97,9 +97,10 @@ class EdgeMatch():
             for items in train_loader:
                 self.edge_model.train()
                 self.sr_model.train()
-
+               
                 lr_images, hr_images, lr_edges, hr_edges = self.cuda(*items)
-
+                if (iteration % 2==0): model = 1
+                else: model = 3
                 # edge model
                 if model == 1:
                     # train

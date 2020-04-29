@@ -48,26 +48,26 @@ class EdgeMatch():
         self.log_file = os.path.join(config.PATH, 'log_' + model_name + '.dat')
 
     def load(self):
-        if self.config.MODEL == 1:
-            self.edge_model.load()
+        #if self.config.MODEL == 1:
+        #    self.edge_model.load()
 
-        elif self.config.MODEL == 2:
-            self.sr_model.load()
+        #elif self.config.MODEL == 2:
+        #    self.sr_model.load()
 
-        else:
-            self.edge_model.load()
-            self.sr_model.load()
+        #else:
+        self.edge_model.load()
+        self.sr_model.load()
 
     def save(self):
-        if self.config.MODEL == 1:
-            self.edge_model.save()
+        #if self.config.MODEL == 1:
+        #    self.edge_model.save()
 
-        elif self.config.MODEL == 2:
-            self.sr_model.save()
+        #elif self.config.MODEL == 2:
+        #    self.sr_model.save()
 
-        else:
-            self.edge_model.save()
-            self.sr_model.save()
+        #else:
+        self.edge_model.save()
+        self.sr_model.save()
 
     def train(self):
         train_loader = DataLoader(
